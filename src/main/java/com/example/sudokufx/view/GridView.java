@@ -1,0 +1,107 @@
+package com.example.sudokufx.view;
+
+import com.example.sudokufx.model.BoxData;
+import com.example.sudokufx.model.SudokuManager;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
+import static com.example.sudokufx.model.SudokuUtilities.*;
+
+public class GridView extends TilePane {
+
+    private Label[][] numberTiles; // the tiles/squares to show in the ui grid
+    private TilePane numberPane;
+
+    public GridView() {
+        super();
+        GridController controller = new GridController(this);
+        numberTiles = new Label[GRID_SIZE][GRID_SIZE];
+        initNumberTiles();
+
+        numberPane = makeNumberPane();
+
+        this.getChildren().add(numberPane);
+        // ...
+    }
+
+    // called by constructor (only)
+    private final void initNumberTiles() {
+        SudokuManager manager = new SudokuManager();
+        manager.createBoard();
+        BoxData[][] boxData = manager.getBoardArray();
+
+        Font font = Font.font("Monospaced", FontWeight.NORMAL, 20);
+
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                Label tile = new Label(String.valueOf(boxData[row][col].getStartValue())); // data from model
+                //System.out.println(boxData[row][col].getStartValue());
+                tile.setPrefWidth(32);
+                tile.setPrefHeight(32);
+                tile.setFont(font);
+                tile.setAlignment(Pos.CENTER);
+                tile.setStyle("-fx-border-color: black; -fx-border-width: 0.5px;"); // css style
+                tile.setOnMouseClicked(tileClickHandler); // add your custom event handler
+                // add new tile to grid
+                numberTiles[row][col] = tile;
+            }
+        }
+    }
+
+    private final TilePane makeNumberPane() {
+        // create the root tile pane
+        TilePane root = new TilePane();
+        root.setPrefColumns(SECTIONS_PER_ROW);
+        root.setPrefRows(SECTIONS_PER_ROW);
+        root.setStyle(
+                "-fx-border-color: black; -fx-border-width: 1.0px; -fx-background-color: white;");
+
+        // create the 3*3 sections and add the number tiles
+        TilePane[][] sections = new TilePane[SECTIONS_PER_ROW][SECTIONS_PER_ROW];
+        int i = 0;
+        for (int srow = 0; srow < SECTIONS_PER_ROW; srow++) {
+            for (int scol = 0; scol < SECTIONS_PER_ROW; scol++) {
+                TilePane section = new TilePane();
+                section.setPrefColumns(SECTION_SIZE);
+                section.setPrefRows(SECTION_SIZE);
+                section.setStyle("-fx-border-color: black; -fx-border-width: 0.5px;");
+
+                // add number tiles to this section
+                for (int row = 0; row < SECTION_SIZE; row++) {
+                    for (int col = 0; col < SECTION_SIZE; col++) {
+                        // calculate which tile and add
+                        section.getChildren().add(
+                                numberTiles[srow * SECTION_SIZE + row][scol * SECTION_SIZE + col]);
+                    }
+                }
+
+                // add the section to the root tile pane
+                root.getChildren().add(section);
+            }
+        }
+        return root;
+    }
+
+    private EventHandler<MouseEvent> tileClickHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            for (int row = 0; row < GRID_SIZE; row++) {
+                for (int col = 0; col < GRID_SIZE; col++) {
+                    if (event.getSource() == numberTiles[row][col]) {
+                        // we got the row and column - now call the appropriate controller method
+                        return;
+                    }
+                }
+            }
+        }
+    };
+
+}
