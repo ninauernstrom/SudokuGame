@@ -79,7 +79,6 @@ public class SudokuUtilities {
         for(int i = 0; i < 4; i++){
             values = randomizeNumbers(values);
             mirrorDir = rand.nextInt(2);
-            System.out.println(mirrorDir);
             switch(mirrorDir){
                 case 0:
                     values = mirrorHorizontal(values);
