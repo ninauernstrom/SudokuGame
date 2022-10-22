@@ -40,10 +40,16 @@ public class GridView extends TilePane {
 
         Font font = Font.font("Monospaced", FontWeight.NORMAL, 20);
 
+        String number = "";
+
         for (int row = 0; row < GRID_SIZE; row++) {
             for (int col = 0; col < GRID_SIZE; col++) {
-                Label tile = new Label(String.valueOf(boxData[row][col].getStartValue())); // data from model
-                //System.out.println(boxData[row][col].getStartValue());
+                if(boxData[row][col].getStartValue() == 0){
+                    number = "";
+                } else {
+                    number = String.valueOf(boxData[row][col].getStartValue()); // data from model
+                }
+                Label tile = new Label(number); // data from model
                 tile.setPrefWidth(32);
                 tile.setPrefHeight(32);
                 tile.setFont(font);
