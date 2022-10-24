@@ -111,6 +111,21 @@ public class SudokuView extends BorderPane {
         menuBar.getMenus().addAll(fileMenu, gameMenu, helpMenu);
     }
 
+<<<<<<< Updated upstream
+=======
+    private void addEventHandlers(Controller controller){
+        EventHandler<ActionEvent> numberButtonHandler = new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                int number = Integer.parseInt(((Button)actionEvent.getSource()).getText());
+                controller.setGuess(number);
+            }
+        };
+        oneButton.addEventHandler(ActionEvent.ACTION, numberButtonHandler);
+        twoButton.addEventHandler(ActionEvent.ACTION, numberButtonHandler);
+    }
+
+>>>>>>> Stashed changes
     // Main.start needs a reference to the menu bar
     public MenuBar getMenuBar() {
         return this.menuBar;

@@ -96,6 +96,25 @@ public class GridView extends TilePane {
         return root;
     }
 
+<<<<<<< Updated upstream
+=======
+    public void updateGridView(){
+        BoxData[][] boxData = sudokuManager.getBoardArray();
+        String number = "";
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                if(boxData[row][col].getValueToShow() == 0){
+                    number = "";
+                } else {
+                    number = String.valueOf(boxData[row][col].getValueToShow());
+                }
+                numberTiles[row][col].setText(number);
+
+            }
+        }
+    }
+
+>>>>>>> Stashed changes
     private EventHandler<MouseEvent> tileClickHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
