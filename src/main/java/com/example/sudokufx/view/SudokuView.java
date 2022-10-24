@@ -1,5 +1,6 @@
 package com.example.sudokufx.view;
 
+import com.example.sudokufx.model.SudokuManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -33,14 +34,18 @@ public class SudokuView extends BorderPane {
     private Button cButton;
     private MenuBar menuBar;
 
+    private SudokuManager sudokuManager;
+
     private GridView gridView;
 
-    SudokuView() {
+    SudokuView(SudokuManager sudokuManager) {
         super();
         //createUiComponents();
-        Controller controller = new Controller(this);
+        this.sudokuManager = sudokuManager;
+        Controller controller = new Controller(this, sudokuManager);
         createMenuBar(controller);
         createUiComponents();
+        addEventHandlers(controller);
 
     }
 
@@ -51,6 +56,7 @@ public class SudokuView extends BorderPane {
         checkButton = new Button("Check");
         hintButton = new Button("Hint");
         VBox vboxLeft = new VBox(checkButton, hintButton);
+        vboxLeft.setAlignment(Pos.CENTER);
         this.setLeft(vboxLeft);
         oneButton = new Button("1");
         twoButton = new Button("2");
@@ -63,6 +69,7 @@ public class SudokuView extends BorderPane {
         nineButton = new Button("9");
         cButton = new Button("C");
         VBox vboxRight = new VBox(oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, cButton);
+        vboxRight.setAlignment(Pos.CENTER);
         this.setRight(vboxRight);
 
     }
@@ -85,6 +92,14 @@ public class SudokuView extends BorderPane {
 
         Menu gameMenu = new Menu("Game");
         MenuItem difficultyItem = new MenuItem("Set difficulty");
+        EventHandler<ActionEvent> difficultyHandler = new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                //controller.setDifficulty();
+            }
+        };
+        difficultyItem.addEventHandler(ActionEvent.ACTION, difficultyHandler);
+
         MenuItem startItem = new MenuItem("Start new game");
         EventHandler<ActionEvent> startHandler = new EventHandler<>() {
             @Override
@@ -109,6 +124,17 @@ public class SudokuView extends BorderPane {
 
         menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu, gameMenu, helpMenu);
+    }
+
+    private void addEventHandlers(Controller controller){
+        EventHandler<ActionEvent> numberButtonHandler = new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                int number = Integer.parseInt(((Button)actionEvent.getSource()).getText());
+                controller.setGuess(number);
+            }
+        };
+        oneButton.addEventHandler(ActionEvent.ACTION, numberButtonHandler);
     }
 
     // Main.start needs a reference to the menu bar

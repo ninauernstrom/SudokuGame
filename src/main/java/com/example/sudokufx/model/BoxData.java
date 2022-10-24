@@ -37,7 +37,6 @@ public class BoxData {
     public int getUserInputValue(){ return userInputValue; }
 
     public void setUserInputValue(int userInputValue) throws IllegalArgumentException {
-        if(userInputValue < 1 || userInputValue > 9) throw new IllegalArgumentException("userInputValue: " + userInputValue);
         this.userInputValue = userInputValue;
     }
 

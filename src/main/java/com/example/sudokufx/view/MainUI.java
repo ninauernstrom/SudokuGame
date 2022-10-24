@@ -1,5 +1,6 @@
 package com.example.sudokufx.view;
 
+import com.example.sudokufx.model.SudokuManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
@@ -13,9 +14,11 @@ public class MainUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        SudokuManager sudokuManager = new SudokuManager();
+        sudokuManager.createBoard();
 
-        SudokuView view = new SudokuView(); // creates the controller
-        GridView gridView = new GridView();
+        SudokuView view = new SudokuView(sudokuManager); // creates the controller
+        GridView gridView = new GridView(sudokuManager);
 
         MenuBar menubar = view.getMenuBar();
 

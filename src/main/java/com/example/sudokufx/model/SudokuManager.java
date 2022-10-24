@@ -8,11 +8,13 @@ public class SudokuManager {
 
     private BoxData[][] boardArray;
     private SudokuUtilities.SudokuLevel difficulty;
+    private int guess;
 
 
     public SudokuManager() {
         boardArray = new BoxData[9][9];
         difficulty = SudokuUtilities.SudokuLevel.EASY;
+        guess = 0;
     }
 
     public BoxData[][] reset(){
@@ -25,7 +27,11 @@ public class SudokuManager {
         return reset();
     }
 
-    public boolean makeGuess(int guess, int row, int column){
+    public void setGuess(int guess){ this.guess = guess; }
+
+    public int getGuess(){ return guess; }
+
+    public boolean makeGuess(int row, int column){
         if(!gameIsOver()){
             boardArray[row][column].setUserInputValue(guess);
             return true;

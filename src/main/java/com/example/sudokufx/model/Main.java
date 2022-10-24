@@ -19,7 +19,8 @@ public class Main {
             int row = sc.nextInt();
             System.out.println("input col");
             int col = sc.nextInt();
-            testManager.makeGuess(guess, row, col);
+            testManager.setGuess(guess);
+            testManager.makeGuess(row, col);
             board = testManager.getBoardArray();
             String info = "";
             for(int i = 0; i < 9; i++){

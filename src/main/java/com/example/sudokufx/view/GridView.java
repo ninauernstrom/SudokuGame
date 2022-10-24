@@ -19,24 +19,28 @@ public class GridView extends TilePane {
 
     private Label[][] numberTiles; // the tiles/squares to show in the ui grid
     private TilePane numberPane;
+    private SudokuManager sudokuManager;
+    private Controller controller;
 
-    public GridView() {
+    public GridView(SudokuManager sudokuManager) {
         super();
-        GridController controller = new GridController(this);
+        //GridController controller = new GridController(this);
+        this.sudokuManager = sudokuManager;
+        controller = new Controller(this, sudokuManager);
         numberTiles = new Label[GRID_SIZE][GRID_SIZE];
         initNumberTiles();
 
         numberPane = makeNumberPane();
 
         this.getChildren().add(numberPane);
+        this.setMaxWidth(50);
+
         // ...
     }
 
     // called by constructor (only)
     private final void initNumberTiles() {
-        SudokuManager manager = new SudokuManager();
-        manager.createBoard();
-        BoxData[][] boxData = manager.getBoardArray();
+        BoxData[][] boxData = sudokuManager.getBoardArray();
 
         Font font = Font.font("Monospaced", FontWeight.NORMAL, 20);
 
@@ -96,12 +100,30 @@ public class GridView extends TilePane {
         return root;
     }
 
+    public void updateGridView(){
+        BoxData[][] boxData = sudokuManager.getBoardArray();
+        String number = "";
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                if(boxData[row][col].getValueToShow() == 0){
+                    number = "";
+                } else {
+                    number = String.valueOf(boxData[row][col].getValueToShow());
+                }
+                numberTiles[row][col].setText(number);
+                System.out.println(number);
+
+            }
+        }
+    }
+
     private EventHandler<MouseEvent> tileClickHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
             for (int row = 0; row < GRID_SIZE; row++) {
                 for (int col = 0; col < GRID_SIZE; col++) {
                     if (event.getSource() == numberTiles[row][col]) {
+                        controller.makeGuess(row, col);
                         // we got the row and column - now call the appropriate controller method
                         return;
                     }
